@@ -8,8 +8,8 @@ import numpy as np
 import random
 import argparse
 from tqdm import tqdm
-from .utils import DataProcessor
-from .utils import Coms2SenseSingleSentenceExample
+from utils import DataProcessor
+from utils import Coms2SenseSingleSentenceExample
 from transformers import (
     AutoTokenizer,
 )
@@ -38,7 +38,8 @@ class Com2SenseDataProcessor(DataProcessor):
         """Reads in data files to create the dataset."""
         if data_dir is None:
             data_dir = self.data_dir
-
+        print('/Users/gurbirarora/winter22_cs188_course_project_student/' + data_dir)
+        data_dir = '/Users/gurbirarora/winter22_cs188_course_project_student/' + data_dir
         ##################################################
         # TODO: Use json python package to load the data
         # properly.
@@ -61,8 +62,74 @@ class Com2SenseDataProcessor(DataProcessor):
         # coming from the same complementary pair.
         # Make sure to handle if data do not have
         # labels field.
-        raise NotImplementedError("Please finish the TODO!")
-        # End of TODO.
+        if data_dir is None:
+            data_dir = self.data_dir
+
+        json_path = os.path.join(data_dir, split+".json")
+        data = json.load(open(json_path, "r"))
+        #print(data)
+        examples = []
+
+        for i in range(len(data)):
+            print(i)
+            datum = data[i]
+            print(datum)
+            guid = i
+            text = None
+            label_1 = None
+            label_2 = None
+            domain = None
+            scenario = None
+            numeracy = None
+            sent_1 = None
+            sent_2 = None
+            if "sent_1" in datum: 
+                sent_1 = datum["sent_1"]
+            #print(sent_1)
+            if "sent_2" in datum:
+                sent_2 = datum["sent_2"]
+            #guid = datum["id"]
+            #print(sent_2)
+            #sentence = datum["sentence"]
+            if "label_1" in datum:
+                label_1 = datum["label_1"]
+            #print(label_1)
+            if "label_2" in datum:    
+                label_2 = datum["label_2"]
+            #print(label_2)
+            if "domain" in datum:
+                domain = datum["domain"]
+            #print(label_2)
+            if "scenario" in datum:
+                scenario = datum["scenario"]
+            #print(scenario)
+            if "numeracy" in datum:
+                numeracy = datum["numeracy"]
+            #print(numeracy)
+            example_1 = Coms2SenseSingleSentenceExample(
+                guid=guid,
+                text=sent_1,
+                label=label_1,
+                domain = domain,
+                scenario = scenario,
+                numeracy = numeracy
+            )
+
+            example_2 = Coms2SenseSingleSentenceExample(
+                guid=guid,
+                text=sent_2,
+                label=label_2,
+                domain = domain,
+                scenario = scenario,
+                numeracy = numeracy
+            )
+
+            examples.append(example_1)
+            examples.append(example_2)
+            print(example_1) 
+            print(example_2)	
+       # End of TODO.
+	
         ##################################################
 
         return examples
