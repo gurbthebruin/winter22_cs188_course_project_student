@@ -7,6 +7,7 @@ import pprint
 import numpy as np
 import random
 import argparse
+import os
 from tqdm import tqdm
 from utils import DataProcessor
 from utils import Coms2SenseSingleSentenceExample
@@ -38,8 +39,8 @@ class Com2SenseDataProcessor(DataProcessor):
         """Reads in data files to create the dataset."""
         if data_dir is None:
             data_dir = self.data_dir
-        print('/Users/gurbirarora/winter22_cs188_course_project_student/' + data_dir)
-        data_dir = '/Users/gurbirarora/winter22_cs188_course_project_student/' + data_dir
+        my_dir = os.path.expanduser('~/winter22_cs188_course_project_student')
+        data_dir = my_dir + '/' + data_dir
         ##################################################
         # TODO: Use json python package to load the data
         # properly.
@@ -62,18 +63,15 @@ class Com2SenseDataProcessor(DataProcessor):
         # coming from the same complementary pair.
         # Make sure to handle if data do not have
         # labels field.
-        if data_dir is None:
-            data_dir = self.data_dir
-
         json_path = os.path.join(data_dir, split+".json")
         data = json.load(open(json_path, "r"))
         #print(data)
         examples = []
 
         for i in range(len(data)):
-            print(i)
+            #print(i)
             datum = data[i]
-            print(datum)
+            #print(datum)
             guid = i
             text = None
             label_1 = None
@@ -126,8 +124,8 @@ class Com2SenseDataProcessor(DataProcessor):
 
             examples.append(example_1)
             examples.append(example_2)
-            print(example_1) 
-            print(example_2)	
+            #print(example_1) 
+            #print(example_2)	
        # End of TODO.
 	
         ##################################################
